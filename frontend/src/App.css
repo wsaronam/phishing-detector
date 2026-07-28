@@ -1,0 +1,11 @@
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-container h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}

@@ -1,6 +1,7 @@
 from app.signals.tld import SuspiciousTldSignal
 from app.signals.ip_url import IpUrlSignal
 from app.signals.typosquatting import TyposquattingSignal
+from app.signals.url_shortener import UrlShortenerSignal
 from app.models.schemas import AnalyzeResponse, SignalResult
 from app.signals.base import Signal
 
@@ -12,7 +13,8 @@ from app.signals.base import Signal
 SIGNALS: list[Signal] = [
     SuspiciousTldSignal(),
     IpUrlSignal(),
-    TyposquattingSignal()
+    #TyposquattingSignal(),
+    UrlShortenerSignal()
 ]
 
 
