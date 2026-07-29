@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import './UrlForm.css';
 
 
 
@@ -22,15 +23,22 @@ function UrlForm({ onSubmit, isLoading }) {
 
 
     return (
-        <form classname='url-form' onHandle={handleSubmit}>
+        <form className='url-form' onSubmit={handleSubmit}>
             <label className='url-form_label'>
                 Enter a URL to check
             </label>
             <div className='url-form_row'>
-                <input className='url-form_input'>
-                </input>
-                
-                <button className='url-form_button'>
+                <input 
+                    id='url-input'
+                    className='url-form_input'
+                    type='text'
+                    placeholder='http://example.com/login'
+                    value={url}
+                    onChange={(e) => setUrl(e.target.value)}
+                    disabled={isLoading}
+                />
+                <button className='url-form_button' type='submit' disabled={isLoading}>
+                    {isLoading? 'Analyzing...' : 'Analyze'}
                 </button>
             </div>
 
