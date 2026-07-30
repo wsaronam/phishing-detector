@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import UrlForm from './components/UrlForm.jsx';
+import RiskScore from './components/RiskScore.jsx';
+import SignalList from './components/SignalList.jsx';
 import { analyzeUrl } from './services/api.js';
 import './App.css'
 
@@ -38,9 +40,9 @@ function App() {
       {apiError && <p className='api-error'>{apiError}</p>}
 
       {result && (
-        <pre className='result-debug'>
-          {JSON.stringify(result, null, 2)}
-        </pre>
+        <div>
+          <RiskScore score={result.risk_score} verdict={result.verdict} />
+        </div>
       )}
     </div>
   );
