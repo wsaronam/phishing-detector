@@ -40,8 +40,9 @@ function App() {
       {apiError && <p className='api-error'>{apiError}</p>}
 
       {result && (
-        <div>
+        <div className='results'>
           <RiskScore score={result.risk_score} verdict={result.verdict} />
+          <SignalList signals={result.signals} />
         </div>
       )}
     </div>

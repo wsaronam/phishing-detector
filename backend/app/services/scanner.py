@@ -13,7 +13,7 @@ from app.signals.base import Signal
 SIGNALS: list[Signal] = [
     SuspiciousTldSignal(),
     IpUrlSignal(),
-    #TyposquattingSignal(),
+    TyposquattingSignal(),
     UrlShortenerSignal()
 ]
 
