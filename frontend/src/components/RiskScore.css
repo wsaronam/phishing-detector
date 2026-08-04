@@ -1,0 +1,44 @@
+.risk-score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.risk-score-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 6px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+}
+
+.risk-score-number {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.risk-score-max {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+.risk-score-label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+}
+
+
+.risk-score-low .risk-score-circle { border-color: #159e47; color: #159e47; }
+.risk-score-low .risk-score-label { background-color: #e0ffeb; color: #0a5224; }
+
+.risk-score-medium .risk-score-circle { border-color: #ce7108; color: #ce7108; }
+.risk-score-medium .risk-score-label { background-color: #ece2b9; color: #833b0e; }
+
+.risk-score-high .risk-score-circle { border-color: #d32525; color: #d32525; }
+.risk-score-high .risk-score-label { background-color: #ffe3e3; color: #8b1919; }
