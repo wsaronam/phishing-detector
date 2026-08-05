@@ -16,7 +16,10 @@ function SignalList({ signals }) {
     return (
         <ul className='signal-list'>
             {signals.map((signal) => (
-                <li key={signal.name} className='signal-list-item'>
+                <li key={signal.name} className={`signal-list-item ${
+                    signal.flagged ? 'signal-list-item-flagged' : 'signal-list-item-cleared'
+                }`}
+                >
                     <span className='signal-list-icon'>{signal.flagged ? 'FLAGGED' : 'OK'}</span>
                     <div className='signal-list-content'>
                         <span className='signal-list-name'>

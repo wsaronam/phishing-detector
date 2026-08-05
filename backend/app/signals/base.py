@@ -16,7 +16,7 @@ class Signal(ABC):
     
 
     @abstractmethod
-    def analyze(self, url: str) -> SignalResult:
+    async def analyze(self, url: str) -> SignalResult:
         '''
         Run this check against URL
 

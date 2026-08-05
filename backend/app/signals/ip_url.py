@@ -22,7 +22,7 @@ class IpUrlSignal(Signal):
             return False
 
     
-    def analyze(self, url: str) -> SignalResult:
+    async def analyze(self, url: str) -> SignalResult:
         hostname = urlparse(url).hostname or ''
 
         if self._is_ip_address(hostname):

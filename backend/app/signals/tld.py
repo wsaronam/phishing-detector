@@ -19,7 +19,7 @@ class SuspiciousTldSignal(Signal):
     weight = 15
 
 
-    def analyze(self, url: str) -> SignalResult:
+    async def analyze(self, url: str) -> SignalResult:
         hostname = urlparse(url).hostname or ''
         tld = hostname.rsplit('.', 1)[-1].lower() if '.' in hostname else ''
 

@@ -66,7 +66,7 @@ class TyposquattingSignal(Signal):
         return closest, Levenshtein.distance(domain_root, closest)
 
 
-    def analyze(self, url: str) -> SignalResult:
+    async def analyze(self, url: str) -> SignalResult:
         hostname = urlparse(url).hostname or ''
         domain_root = self._extract_root_domain(hostname)
 

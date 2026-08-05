@@ -19,7 +19,7 @@ class UrlShortenerSignal(Signal):
     weight = 10
 
     
-    def analyze(self, url: str) -> SignalResult:
+    async def analyze(self, url: str) -> SignalResult:
         hostname = (urlparse(url).hostname or '').lower()
 
         if hostname in KNOWN_SHORTENERS:
