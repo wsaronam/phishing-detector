@@ -2,6 +2,7 @@ from app.signals.tld import SuspiciousTldSignal
 from app.signals.ip_url import IpUrlSignal
 from app.signals.typosquatting import TyposquattingSignal
 from app.signals.url_shortener import UrlShortenerSignal
+from app.signals.domain_age import DomainAgeSignal
 from app.models.schemas import AnalyzeResponse, SignalResult
 from app.signals.base import Signal
 
@@ -14,7 +15,8 @@ SIGNALS: list[Signal] = [
     SuspiciousTldSignal(),
     IpUrlSignal(),
     TyposquattingSignal(),
-    UrlShortenerSignal()
+    UrlShortenerSignal(),
+    DomainAgeSignal()
 ]
 
 
@@ -31,11 +33,11 @@ def _calculate_verdict(score: int) -> str:
     return 'low_risk'
 
 
-def scan_url(url: str) -> AnalyzeResponse:
+async def scan_url(url: str) -> AnalyzeResponse:
     '''
     Runs all signals against the URL to get the results
     '''
-    results: list[SignalResult] = [signal.analyze(url) for signal in SIGNALS]
+    results: list[SignalResult] = [await signal.analyze(url) for signal in SIGNALS]
 
     raw_score = sum(result.weight for result in results if result.flagged)
     normalized_score = round((raw_score / MAX_POSSIBLE_SCORE) * 100) if MAX_POSSIBLE_SCORE else 0

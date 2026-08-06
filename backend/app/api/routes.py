@@ -8,5 +8,5 @@ router = APIRouter()
 
 
 @router.post('/analyze', response_model=AnalyzeResponse)
-def analyze_url(request: AnalyzeRequest) -> AnalyzeResponse:
-    return scan_url(request.url)
+async def analyze_url(request: AnalyzeRequest) -> AnalyzeResponse:
+    return await scan_url(request.url)
