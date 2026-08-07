@@ -13,3 +13,7 @@ dist/
 # Editor
 .vscode/
 .DS_Store
+
+
+# Database
+*.db

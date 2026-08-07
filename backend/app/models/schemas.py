@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Literal
+from datetime import datetime
 
 
 
@@ -31,3 +32,19 @@ class AnalyzeResponse(BaseModel):
     risk_score: int = Field(..., ge=0, le=100, description='Overall risk score from 0-100')
     verdict: Literal['low_risk', 'medium_risk', 'high_risk']
     signals: list[SignalResult]
+
+
+
+class ScanHistoryItem(BaseModel):
+    '''
+    past scan object from /history endpoint
+    '''
+    id: int
+    url: str
+    risk_score: int
+    verdict: Literal['low_risk', 'medium_risk', 'high_risk']
+    signals: list[SignalResult]
+    scanned_at: datetime
+
+    class Config:
+        from_attributes = True # allows us to build from scanrecord
