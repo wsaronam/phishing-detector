@@ -16,3 +16,9 @@ export async function analyzeUrl(url) {
     const response = await apiClient.post('/api/analyze', { url });
     return response.data;
 }
+
+
+export async function getScanHistory() {
+    const response = await apiClient.get('/api/history');
+    return response.data;
+}
