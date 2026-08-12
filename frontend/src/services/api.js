@@ -22,3 +22,8 @@ export async function getScanHistory() {
     const response = await apiClient.get('/api/history');
     return response.data;
 }
+
+
+export async function deleteScan(scanId) {
+    await apiClient.delete(`/api/history/${scanId}`);
+}

@@ -3,7 +3,7 @@ import UrlForm from './components/UrlForm.jsx';
 import RiskScore from './components/RiskScore.jsx';
 import SignalList from './components/SignalList.jsx';
 import HistoryList from './components/HistoryList.jsx';
-import { analyzeUrl, getScanHistory } from './services/api.js';
+import { analyzeUrl, getScanHistory, deleteScan } from './services/api.js';
 import './App.css'
 
 
@@ -63,6 +63,17 @@ function App() {
   }
 
 
+  const handleDeleteHistoryItem = async (scanId) => {
+    try {
+      await deleteScan(scanId);
+      setHistory((prev) => prev.filter((item) => item.id !== scanId));
+    }
+    catch (err) {
+      console.error('Failed to delete scan: ' + err);
+    }
+  }
+
+
   return (
     <div className='app-container'>
       <h1>Phishing URL Detector</h1>
@@ -83,6 +94,7 @@ function App() {
           history={history}
           isLoading={isHistoryLoading}
           onSelect={handleSelectHistoryItem}
+          onDelete={handleDeleteHistoryItem}
         />
       </div>
     </div>

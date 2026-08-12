@@ -73,3 +73,16 @@ def get_scan_history(db: Session, limit: int = 20) -> list[ScanRecord]:
         .limit(limit)
         .all()
     )
+
+
+def delete_scan(db: Session, scan_id: int) -> bool:
+    '''
+    Deeletes a scan record using ID.
+    '''
+    record = db.query(ScanRecord).filter(ScanRecord.id == scan_id).first()
+    if record is None:
+        return False
+    else:
+        db.delete(record)
+        db.commit()
+        return True

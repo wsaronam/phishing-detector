@@ -23,10 +23,19 @@
     border: 1px solid #e7e9ec;
     border-radius: 8px;
     background-color: white;
+}
+
+.history-item-clickable {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-width: 0;
     cursor: pointer;
 }
 
-.history-item:hover {
+.history-item-clickable:hover .history-item-url {
     border-color: #9eacf0;
     background-color: #e7e9ec;
 }
@@ -77,6 +86,23 @@
 }
 
 .history-item-badge-high {
+    background-color: #ffe3e3;
+    color: #8b1919;
+}
+
+
+.history-item-delete {
+    background: none;
+    border: none;
+    color: #686e7c;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.history-item-delete:hover {
     background-color: #ffe3e3;
     color: #8b1919;
 }

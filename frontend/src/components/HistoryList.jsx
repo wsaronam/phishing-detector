@@ -22,7 +22,7 @@ function formatTimestamp(isoString) {
 
 
 
-function HistoryList({ history, isLoading, onSelect }) {
+function HistoryList({ history, isLoading, onSelect, onDelete }) {
     if (isLoading) {
         return (
             <p className='history-list-status'>
@@ -49,18 +49,31 @@ function HistoryList({ history, isLoading, onSelect }) {
                     <li
                         key={item.id}
                         className='history-item'
-                        onClick={() => onSelect?.(item)}
                     >
-                        <div className='history-item-main'>
-                            <span className='history-item-url'>{item.url}</span>
-                            <span>{formatTimestamp(item.scanned_at)}</span>
+                        <div className='history-item-clickable' onClick={() => onSelect?.(item)}>
+                            <div className='history-item-main'>
+                                <span className='history-item-url'>{item.url}</span>
+                                <span>{formatTimestamp(item.scanned_at)}</span>
+                            </div>
+                            <div className='history-item-meta'>
+                                <span className='history-item-score'>{item.risk_score}/100</span>
+                                <span className={`history-item-badge ${badge.className}`}>{badge.label}</span>
+                            </div>
                         </div>
-                        <div className='history-item-meta'>
-                            <span className='history-item-score'>{item.risk_score}/100</span>
-                            <span className={`history-item-badge ${badge.className}`}>{badge.label}</span>
-                        </div>
+                        
+                        <button
+                            type='button'
+                            className='history-item-delete'
+                            aria-label={`Delete scan of ${item.url}`}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onDelete?.(item.id);
+                            }}
+                        >
+                            X
+                        </button>
                     </li>
-                )
+                );
 
             })}
         </ul>
