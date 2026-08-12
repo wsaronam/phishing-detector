@@ -1,0 +1,82 @@
+.history-list-status {
+    color: #686e7c;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.history-list {
+    list-style: none;
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+
+.history-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.65rem 1rem;
+    border: 1px solid #e7e9ec;
+    border-radius: 8px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.history-item:hover {
+    border-color: #9eacf0;
+    background-color: #e7e9ec;
+}
+
+.history-item-main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0; /* so we can get text-overflow to work */
+    gap: 0.15rem;
+}
+
+.history-item-url {
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.history-item-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+}
+
+.history-item-score {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1f498d;
+}
+
+.history-item-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+}
+
+.history-item-badge-low {
+    background-color: #e0ffeb;
+    color: #0a5224;
+}
+
+.history-item-badge-medium {
+    background-color: #ece2b9;
+    color: #833b0e;
+}
+
+.history-item-badge-high {
+    background-color: #ffe3e3;
+    color: #8b1919;
+}

@@ -10,6 +10,17 @@ const VERDICT_LABELS = {
 }
 
 
+function formatTimestamp(isoString) {
+    const date = new Date(isoString);
+    return date.toLocaleString(undefined, {
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit'
+    });
+}
+
+
 
 function HistoryList({ history, isLoading, onSelect }) {
     if (isLoading) {
@@ -42,17 +53,21 @@ function HistoryList({ history, isLoading, onSelect }) {
                     >
                         <div className='history-item-main'>
                             <span className='history-item-url'>{item.url}</span>
+                            <span>{formatTimestamp(item.scanned_at)}</span>
                         </div>
                         <div className='history-item-meta'>
                             <span className='history-item-score'>{item.risk_score}/100</span>
-                            <span className=''>{badge.label}</span>
+                            <span className={`history-item-badge ${badge.className}`}>{badge.label}</span>
                         </div>
                     </li>
                 )
+
             })}
         </ul>
     )
 }
+
+
 
 
 export default HistoryList;
