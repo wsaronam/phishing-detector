@@ -15,7 +15,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173",
-                   'https://phishing-detector-dcgm.onrender.com'
+                   'phishing-detector-80290sc21-wsaronam1.vercel.app'
                     ],
     allow_methods=['*'],
     allow_headers=['*']
