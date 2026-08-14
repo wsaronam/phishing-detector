@@ -13,6 +13,15 @@
 }
 
 
+.results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+
 .history-section {
   width: 100%;
   max-width: 600px;
