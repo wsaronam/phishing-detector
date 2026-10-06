@@ -1,0 +1,139 @@
+# CI/CD + DevSecOps pipeline for the phishing detector
+#   Backend:  Pytest (tests) · Bandit (SAST) · pip-audit (dependencies) · Trivy (container image)
+#   Frontend: npm audit (dependencies) + production build
+#   Repo:     Gitleaks (secrets in full git history)
+name: CI / Security
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "0 13 * * 1"   # Mondays 6am Pacific: re-checks for newly disclosed CVEs
+  workflow_dispatch:        # run manually from the Actions tab
+
+permissions:
+  contents: read            # least privilege; jobs ask for more only when needed
+
+env:
+  PYTHON_VERSION: "3.12"
+
+jobs:
+  # 1. Backend unit tests
+  test:
+    name: Tests (Pytest)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pytest-cov
+      - name: Run tests
+        run: pytest --cov=app --cov-report=term-missing
+
+  # 2. Static analysis (SAST) of the backend code
+  bandit:
+    name: SAST (Bandit)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write   # posts findings to the repo's Security tab
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - run: pip install "bandit[sarif]"
+      - name: Run Bandit (medium severity and up fails the build)
+        run: bandit -r backend/app --severity-level medium -f sarif -o bandit.sarif
+      - uses: github/codeql-action/upload-sarif@v4
+        if: always()
+        with:
+          sarif_file: bandit.sarif
+          category: bandit
+
+  # 3. Python dependency vulnerability check
+  pip-audit:
+    name: Backend dependencies (pip-audit)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - run: pip install pip-audit
+      - name: Audit requirements.txt against known CVEs
+        run: pip-audit -r backend/requirements.txt --desc
+
+  # 4. JavaScript dependency check + make sure the frontend still builds
+  frontend:
+    name: Frontend (npm audit + build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - name: Fail on high/critical vulnerabilities
+        run: npm audit --audit-level=high
+      - run: npm run build
+
+  # 5. Secrets detection (scans the full git history)
+  gitleaks:
+    name: Secrets (Gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Run Gitleaks
+        run: |
+          docker run --rm -v "${{ github.workspace }}:/repo" \
+            ghcr.io/gitleaks/gitleaks:latest \
+            git /repo --redact --verbose
+
+  # 6. Build the backend Docker image and scan it with Trivy
+  #    Runs only after tests pass. Uses the Trivy CLI image at a version named safe
+  #    in Aqua's March 2026 incident advisory, instead of the trivy-action tags that were hijacked.
+  trivy:
+    name: Container scan (Trivy)
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Build image
+        run: docker build -t phishing-detector-api:${{ github.sha }} backend
+      - name: Scan image (fail on fixable HIGH/CRITICAL)
+        run: |
+          docker run --rm \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy:0.69.3 \
+            image --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 \
+            phishing-detector-api:${{ github.sha }}
