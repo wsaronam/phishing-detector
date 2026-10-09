@@ -1,3 +1,4 @@
+import pytest
 from app.signals.ip_url import IpUrlSignal
 
 
