@@ -17,7 +17,7 @@ pytest-asyncio==1.4.0
 pytest==9.1.1
 python-dateutil==2.9.0.post0
 python-whois==0.9.6
-RapidFuzz==3.14.5
+RapidFuzz==3.14.6
 six==1.17.0
 SQLAlchemy==2.0.51
 starlette==1.7.0
